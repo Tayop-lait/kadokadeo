@@ -131,6 +131,17 @@ Read by `npm run build` / `make compile-games`, not by Laravel.
 | ------------- | ---------------------------------------------------------------------------------------- | ------- |
 | `GAME_BUILDS` | `off`: the build does not archive the previous version of the game bundles               | (on)    |
 
+The web server should compress the bundles of the games (`public/gamesdata/*.js`: La Brute is 6.1 MB, 1.2 MB in gzip), as the nginx of Docker does (`docker/app/conf/kadokadeo.conf`):
+
+```nginx
+gzip on;
+gzip_comp_level 6;
+gzip_min_length 1024;
+gzip_vary on;
+gzip_proxied any;
+gzip_types text/plain text/css application/javascript text/javascript application/json image/svg+xml application/wasm;
+```
+
 You can generate keys with :
 
 ```bash
