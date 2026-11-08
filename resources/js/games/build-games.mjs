@@ -11,8 +11,12 @@ const outputDir = 'public/gamesdata'
 // not public: the bundles are minified, their source maps are only for us (crash reports)
 const sourceMapDir = 'storage/app/game-sourcemaps'
 
+// GAMES=labrute,hammerfest: only these ones (the manifest keeps the others)
+const only = process.env.GAMES ? process.env.GAMES.split(',').map((name) => name.trim()) : null
+
 const games = (await readdir(sourceDir))
   .filter((fileName) => !fileName.startsWith('tmp') && fileName.endsWith('.js'))
+  .filter((fileName) => !only || only.includes(basename(fileName, '.js')))
   .sort()
   .map((fileName) => ({
     entry: join(sourceDir, fileName),
@@ -22,7 +26,8 @@ const games = (await readdir(sourceDir))
 await mkdir(outputDir, { recursive: true })
 await mkdir(sourceMapDir, { recursive: true })
 
-const manifest = {}
+const manifestPath = join(outputDir, 'manifest.json')
+const manifest = only && existsSync(manifestPath) ? JSON.parse(await readFile(manifestPath, 'utf8')) : {}
 
 // old versions of the games kept for their replays (resources/js/games/builds/archive.mjs); GAME_BUILDS=off: none
 const archive =
@@ -57,7 +62,7 @@ for (const game of games) {
   }
 }
 
-await writeFile(join(outputDir, 'manifest.json'), `${JSON.stringify(manifest, null, 2)}\n`)
+await writeFile(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`)
 
 if (archive) await archive.finish()
 

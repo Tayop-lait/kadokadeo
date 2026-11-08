@@ -3,7 +3,11 @@
 -L jsImport
 -cp ./resources/hx/lib
 -cp ./resources/hx/games
--debug
 
+--each
+-debug
 -js ./resources/js/games/hammerfest.js
 hammerfest.Game
+--next
+-js ./resources/js/games/labrute.js
+labrute.Game
