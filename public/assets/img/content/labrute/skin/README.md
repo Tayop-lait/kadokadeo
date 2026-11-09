@@ -20,8 +20,9 @@ Il dessine chaque SVG en WebP au double de sa plus grande taille dans le jeu (so
 les animaux au double de leur taille, passe les polices en WOFF2, range les originaux dans `src/` (jamais chargé), puis
 refait `skin.json`. Pour changer une image : mettre la nouvelle (SVG, PNG…) ici, relancer le script.
 
-Les icônes des compétences ne sont pas dans le skin : leurs SVG sont dans `resources/hx/games/labrute/images/skills/tier-N/`,
-mis en planche (`labrute-1.webp`) par `build_skills.mjs` (même commande, autre script).
+Les icônes des compétences ne sont pas dans le skin : elles sont dans la planche `labrute-1.webp`, faite par
+`build_skills.mjs` à partir des SVG de labrute-react (`client/public/images/skills`, un dossier `tier-1/`, `tier-2/`,
+`tier-3/` donné en argument).
 
 | Nom | Où | Taille d'affichage |
 | --- | --- | --- |

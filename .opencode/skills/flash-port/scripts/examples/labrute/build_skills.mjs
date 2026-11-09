@@ -1,16 +1,20 @@
 // La Brute (KadoKadeo): the sheet of the icons of the skills, public/assets/img/content/labrute/labrute-1.webp / .json
-// (frames tier-1/<skill>.png ... tier-3/<skill>.png), from their SVG (resources/hx/games/labrute/images/skills/tier-N,
-// client/public/images/skills of labrute-react): each one drawn at SIZE pixels, twice its biggest size in the game (the
-// tooltip of a skill, Describe.SKILL_ICON), in a sheet whose sides are powers of two (its mipmaps: smooth in the small
-// icons of the fight).
+// (frames tier-1/<skill>.png ... tier-3/<skill>.png), from their SVG (the skills of labrute-react,
+// client/public/images/skills, in a folder of tier-1/, tier-2/, tier-3/, not kept here): each one drawn at SIZE pixels,
+// twice its biggest size in the game (the tooltip of a skill, Describe.SKILL_ICON), in a sheet whose sides are powers
+// of two (its mipmaps: smooth in the small icons of the fight).
 // Needs sharp (not a dependency of KadoKadeo), for example in the front container:
 //   mkdir -p /tmp/lbtools && cd /tmp/lbtools && npm i sharp@0.33.5
-//   NODE_TOOLS=/tmp/lbtools node build_skills.mjs [kadokadeo root]
+//   NODE_TOOLS=/tmp/lbtools node build_skills.mjs <folder of the SVG: tier-1/ tier-2/ tier-3/> [kadokadeo root]
 import { readdirSync, readFileSync, writeFileSync, existsSync, rmSync } from 'node:fs'
 import { createRequire } from 'node:module'
 import { join, basename } from 'node:path'
 
-const root = process.argv[2] ?? '.'
+const [srcDir, root = '.'] = process.argv.slice(2)
+if (!srcDir) {
+  console.error('usage: node build_skills.mjs <folder of the SVG: tier-1/ tier-2/ tier-3/> [kadokadeo root]')
+  process.exit(1)
+}
 const require = createRequire(join(process.env.NODE_TOOLS ?? '/tmp/lbtools', 'node_modules'))
 const sharp = require('sharp')
 
@@ -18,7 +22,6 @@ const SIZE = 102
 // (transparent pixels between them: nothing of a neighbour in the small mipmaps)
 const PAD = 4
 const SVG_SIZE = 34
-const srcDir = join(root, 'resources/hx/games/labrute/images/skills')
 const out = join(root, 'public/assets/img/content/labrute')
 
 const icons = []

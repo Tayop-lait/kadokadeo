@@ -70,10 +70,5 @@ compile-games:
 	docker exec -u dev kadokadeo_app haxe compile-dev.hxml
 	docker exec -u node -w /www kadokadeo_front yarn games:bundle
 
-# La Brute only (the other bundles and the manifest kept)
-compile-labrute:
-	docker exec -u dev kadokadeo_app haxe -L pixijs -L crypto -L jsImport -cp ./resources/hx/lib -cp ./resources/hx/games -js ./resources/js/games/labrute.js labrute.Game
-	docker exec -u node -w /www -e GAMES=labrute kadokadeo_front yarn games:bundle
-
 update-libraries:
 	docker exec -u dev kadokadeo_app haxelib install --always resources/hx/install.hxml
